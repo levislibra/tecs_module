@@ -1,0 +1,47 @@
+<openerp>
+  <data>
+
+    <record id="invoice_form_inherited"  model="ir.ui.view">
+      <field name="name">Extension Invoice form</field>
+      <field name="model">account.invoice</field>
+      <field name="inherit_id" ref="account.invoice_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='partner_id']" position='after'>
+          <field name="periodo" attrs="{'readonly': [('state', '!=', 'draft')], 'required': True}"/>
+          <field name="cuotas" attrs="{'readonly': [('state', '!=', 'draft')], 'required': True}"/>
+          <field name="monto_cuota" attrs="{'readonly': [('state', '!=', 'draft')], 'required': True}"/>
+          <field name="producto_id" attrs="{'readonly': [('state', '!=', 'draft')], 'required': True}"/>
+          <field name="descripcion" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+          <field name="invoice_line_id" invisible="1"/>
+          <button name="computar_plazo" type="object" nolabel="1" invisible="1"/>
+          <button name="computar_plazo" type="object" nolabel="1" string="Computar Plazo" class="oe_highlight" states="draft"/>
+        </xpath>
+
+        <xpath expr="//field[@name='invoice_line_ids']" position='before'>
+          <button name="actualizar" type="object" string="Actualizar" class="oe_highlight" states="draft"/>
+        </xpath>
+
+        <xpath expr="//field[@name='invoice_line_ids']" position="attributes">
+          <attribute name="readonly">1</attribute>
+        </xpath>
+
+        <xpath expr="//field[@name='user_id']" position="attributes">
+          <attribute name="readonly">1</attribute>
+        </xpath>
+
+        <!--<xpath expr="//field[@name='currency_rate']" position="attributes">
+          <attribute name="invisible">1</attribute>
+        </xpath>-->
+
+        <xpath expr="//field[@name='payment_term_id']" position="attributes">
+          <attribute name="readonly">0</attribute>
+        </xpath>
+
+        <xpath expr="//page[2]" position="attributes">
+          <attribute name="invisible">1</attribute>
+        </xpath>
+      </field>
+    </record>
+
+  </data>
+</openerp>
