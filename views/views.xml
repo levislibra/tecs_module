@@ -12,7 +12,7 @@
           <field name="monto_cuota" attrs="{'readonly': [('state', '!=', 'draft')], 'required': True}"/>
           <field name="producto_id" attrs="{'readonly': [('state', '!=', 'draft')], 'required': True}"/>
           <field name="descripcion" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
-          <field name="invoice_line_id" invisible="1"/>
+          <field name="invoice_line_id" invisible="0"/>
           <button name="computar_plazo" type="object" nolabel="1" invisible="1"/>
           <button name="computar_plazo" type="object" nolabel="1" string="Computar Plazo" class="oe_highlight" states="draft"/>
         </xpath>
@@ -42,6 +42,24 @@
         </xpath>
       </field>
     </record>
+
+    <record id="inherit_account_payment" model="ir.ui.view">
+      <field name="name">Inherits account.payment</field>
+      <field name="model">account.payment</field>
+      <field name="type">form</field>
+      <field name="inherit_id" ref="account.view_account_payment_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='amount']" position='before'>
+          <field name="property_account_receivable_id" invisible="1"/>
+          <field name="apunte_contable_id" attrs="{'readonly': [('state', '!=', 'draft')], 'required': True}"/>
+        </xpath>
+        <xpath expr="//field[@name='amount']" position="attributes">
+          <attribute name="readonly">1</attribute>
+        </xpath>
+
+      </field>
+    </record>
+
 
   </data>
 </openerp>

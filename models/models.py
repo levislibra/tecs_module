@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from openerp import models, fields, api
+from openerp.exceptions import UserError
+from openerp.exceptions import ValidationError
 
 class ExtendsInvoice(models.Model):
 	_name = 'account.invoice'
@@ -11,6 +13,7 @@ class ExtendsInvoice(models.Model):
 	monto_cuota = fields.Float('Monto cuota')
 	producto_id = fields.Many2one('product.product', 'Producto')
 	descripcion = fields.Char('Descripcion')
+	#payment_term_id = fields.Many2one('account.payment.term', 'Plazo de pago', compute='computar_plazo')
 
 	invoice_line_id = fields.Many2one('account.invoice.line', 'Linea de factura')
 
@@ -68,12 +71,10 @@ class ExtendsInvoice(models.Model):
 			raise ValidationError("El periodo no esta definido.")
 		return ret
 
-	@api.one
 	def delete_payment_term_line(self):
 		for apt in self.payment_term_id.line_ids:
 			apt.unlink()
 
-	@api.one
 	def create_payment_term_line(self):
 		# i = 0 ya que la primer cuota es en el momento.
 		i = 0
@@ -117,10 +118,62 @@ class ExtendsInvoice(models.Model):
 				})
 			self.payment_term_id = pti.id
 			print self.payment_term_id
-			#self.create_payment_term_line()
+			self.delete_payment_term_line()
+			self.create_payment_term_line()
 		else:
 			#Actualizamos el termino de pago
 			print "Actualizamos payment term"
 			self.payment_term_id.name = name
 			self.delete_payment_term_line()
 			self.create_payment_term_line()
+
+	@api.onchange('periodo', 'cuotas', 'monto_cuota', 'producto_id', 'descripcion')
+	def onchange_values(self):
+		self.actualizar()
+
+	@api.one
+	@api.constrains('state')
+	def _check_values(self):
+		if self.state == 'open':
+			if self.cuotas != len(self.payment_term_id.line_ids):
+				raise UserError("Debe Computar plazo, ya que la cantidad de cuotas no coinciden.")
+			if self.monto_cuota != self.payment_term_id.line_ids[0].value_amount:
+				raise UserError("Debe Computar plazo, ya que el monto de cuota no coincide.")
+			if len(self.payment_term_id.line_ids) <= 1:
+				raise UserError("La cantidad de cuotas debe ser mayor a una.")
+			if self.dias_periodo() != self.payment_term_id.line_ids[1].days:
+				raise UserError("Debe Computar plazo, ya que el periodo de las cuotas no coinciden.")
+
+
+class AccountPayment(models.Model):
+    # This OpenERP object inherits from cheques.de.terceros
+    # to add a new float field
+    _inherit = 'account.payment'
+    _name = 'account.payment'
+    
+    apunte_contable_id = fields.Many2one('account.move.line', 'Cuota', domain="[('partner_id', '=', partner_id), ('account_id', '=', property_account_receivable_id), ('reconciled', '=', False), ('debit', '>', 0)]")
+    property_account_receivable_id = fields.Many2one('account.account', 'Cuenta', compute='_compute_account_receivable')
+
+    @api.one
+    @api.onchange('partner_id')
+    def _compute_account_receivable(self):
+    	print self.partner_id
+    	if len(self.partner_id) > 0:
+    		self.property_account_receivable_id = self.partner_id.property_account_receivable_id.id
+
+    @api.onchange('apunte_contable_id')
+    def compute_amount(self):
+    	self.amount = self.apunte_contable_id.debit
+
+class AccountMoveLine(models.Model):
+	_inherit = 'account.move.line'
+	_name = 'account.move.line'
+
+	_order = 'date_maturity desc'
+	_rec_name = 'display_name'
+	display_name = fields.Char('Name', compute='_compute_name')
+
+
+	@api.one
+	def _compute_name(self):
+		self.display_name = str(self.date_maturity) + ' ' + str(self.debit)
