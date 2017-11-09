@@ -3,6 +3,7 @@
 from openerp import models, fields, api
 from openerp.exceptions import UserError
 from openerp.exceptions import ValidationError
+from datetime import datetime
 
 class ExtendsInvoice(models.Model):
 	_name = 'account.invoice'
@@ -156,32 +157,129 @@ class ExtendsInvoice(models.Model):
 			if self.dias_periodo() != self.payment_term_id.line_ids[1].days:
 				raise UserError("Debe Computar plazo, ya que el periodo de las cuotas no coinciden.")
 
-
-	"""class AccountPayment(models.Model):
-    # This OpenERP object inherits from cheques.de.terceros
-    # to add a new float field
-    _name = 'account.payment'
-    _inherit = 'account.payment'
-    
-    apunte_contable_id = fields.Many2one('account.move.line', 'Cuota', domain="[('partner_id', '=', partner_id), ('account_id', '=', property_account_receivable_id), ('reconciled', '=', False), ('debit', '>', 0)]")
-    #apunte_contable_ids = fields.One2many('account.move.line', 'payment_cuota_id','Cuotas', domain="[('partner_id', '=', partner_id), ('account_id', '=', property_account_receivable_id), ('reconciled', '=', False), ('debit', '>', 0)]")
-    property_account_receivable_id = fields.Many2one('account.account', 'Cuenta', compute='_compute_account_receivable')
-
-    @api.one
-    @api.onchange('partner_id')
-    def _compute_account_receivable(self):
-    	print self.partner_id
-    	if len(self.partner_id) > 0:
-    		self.property_account_receivable_id = self.partner_id.property_account_receivable_id.id
-
-    @api.onchange('apunte_contable_id')
-    def compute_amount(self):
-    	self.amount = self.apunte_contable_id.debit
-	"""
-
 class AccountMoveLine(models.Model):
 	_name = 'account.move.line'
 	_inherit = 'account.move.line'
 
 	_order = 'date_maturity asc'
 	factura_id = fields.Many2one('account.invoice', 'Factura')
+
+
+class PanelAdmin(models.Model):
+	_name = 'panel.admin'
+
+	name = fields.Char()
+	partner_activos = fields.Integer('Clientes activos', compute='_compute_clientes_activos')
+	cuotas_pendientes = fields.Integer('Cuotas pendientes', compute='_compute_cuotas_pendientes')
+	total_efectivo_pendiente = fields.Integer('Efectivo pendiente de cobro', compute='_compute_total_efectivo_pendiente')
+	efectivo_moroso = fields.Integer('Total de efectivo vencido', compute='_compute_cuotas_moroso')
+
+	@api.one
+	def _compute_clientes_activos(self):
+		cr = self.env.cr
+		uid = self.env.uid
+		partner_obj = self.pool.get('res.partner')
+		partner_ids = partner_obj.search(cr, uid, [])
+		partner_activos = 0
+		for partner_id in partner_ids:
+			cuota_obj = self.pool.get('account.move.line')
+			cuota_ids = cuota_obj.search(cr, uid, [
+				('partner_id', '=', partner_id),
+				('amount_residual', '>', 0.0),
+				('invoice_id', '!=', None),
+				('reconciled', '=', False),
+				])
+			if len(cuota_ids) > 0:
+				partner_activos += 1
+		self.partner_activos = partner_activos
+	
+	@api.one
+	def _compute_cuotas_pendientes(self):
+		cr = self.env.cr
+		uid = self.env.uid
+		cuota_obj = self.pool.get('account.move.line')
+		cuota_ids = cuota_obj.search(cr, uid, [
+			('amount_residual', '>', 0.0),
+			('invoice_id', '!=', None),
+			('reconciled', '=', False),
+			])
+		self.cuotas_pendientes = len(cuota_ids)
+
+	@api.one
+	def _compute_total_efectivo_pendiente(self):
+		total_efectivo_pendiente = 0
+		cr = self.env.cr
+		uid = self.env.uid
+		cuota_obj = self.pool.get('account.move.line')
+		cuota_ids = cuota_obj.search(cr, uid, [
+			('amount_residual', '>', 0.0),
+			('invoice_id', '!=', None),
+			('reconciled', '=', False),
+			])
+		for cuota_id in cuota_ids:
+			cuota_obj_id = cuota_obj.browse(cr, uid, cuota_id)
+			total_efectivo_pendiente += cuota_obj_id.amount_residual
+		self.total_efectivo_pendiente = total_efectivo_pendiente
+
+	@api.one
+	def _compute_cuotas_moroso(self):
+		fecha_actual = datetime.now()
+		efectivo_moroso = 0
+		cr = self.env.cr
+		uid = self.env.uid
+		cuota_obj = self.pool.get('account.move.line')
+		cuota_ids = cuota_obj.search(cr, uid, [
+			('amount_residual', '>', 0.0),
+			('invoice_id', '!=', None),
+			('reconciled', '=', False),
+			('date_maturity', '<', fecha_actual),
+			])
+		for cuota_id in cuota_ids:
+			cuota_obj_id = cuota_obj.browse(cr, uid, cuota_id)
+			efectivo_moroso += cuota_obj_id.amount_residual
+		self.efectivo_moroso = efectivo_moroso
+
+
+	def ver_pendientes(self, cr, uid, ids, context=None):
+		pendientes_obj = self.pool.get('account.move.line')
+		pendientes_ids = pendientes_obj.search(cr, uid, [
+			('amount_residual', '>', 0.0),
+			('invoice_id', '!=', None),
+			('reconciled', '=', False),
+			])
+
+		model_obj = self.pool.get('ir.model.data')
+		data_id = model_obj._get_id(cr, uid, 'tecs_module', 'ver_pendientes_view')
+		view_id = model_obj.browse(cr, uid, data_id, context=None).res_id
+		return {
+			'domain': "[('id', 'in', ["+','.join(map(str, pendientes_ids))+"])]",
+			'name': ('Pendientes'),
+			'view_type': 'form',
+			'view_mode': 'tree',
+			'res_model': 'account.move.line',
+			'view_id': view_id,
+			'type': 'ir.actions.act_window',
+		}
+
+	def ver_vencidas(self, cr, uid, ids, context=None):
+		fecha_actual = datetime.now()
+		pendientes_obj = self.pool.get('account.move.line')
+		pendientes_ids = pendientes_obj.search(cr, uid, [
+			('amount_residual', '>', 0.0),
+			('invoice_id', '!=', None),
+			('reconciled', '=', False),
+			('date_maturity', '<', fecha_actual),
+			])
+
+		model_obj = self.pool.get('ir.model.data')
+		data_id = model_obj._get_id(cr, uid, 'tecs_module', 'ver_pendientes_view')
+		view_id = model_obj.browse(cr, uid, data_id, context=None).res_id
+		return {
+			'domain': "[('id', 'in', ["+','.join(map(str, pendientes_ids))+"])]",
+			'name': ('Pendientes'),
+			'view_type': 'form',
+			'view_mode': 'tree',
+			'res_model': 'account.move.line',
+			'view_id': view_id,
+			'type': 'ir.actions.act_window',
+		}

@@ -60,5 +60,69 @@
       </field>
     </record>
 
+    <!-- Panel Admin -->
+
+    <!-- Arbol -->
+    
+    <record model="ir.ui.view" id="panel_admin_tree">
+      <field name="name">panel.admin.tree</field>
+      <field name="model">panel.admin</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+        </tree>
+      </field>
+    </record>
+  
+    <!-- Formulario -->
+
+    <record id="panel_admin_form" model="ir.ui.view">
+        <field name="name">panel.admin.form</field>
+        <field name="model">panel.admin</field>
+        <field name="arch" type="xml">
+            <form string="Panel">
+                <sheet>
+                  <div>
+                    <button name="ver_pendientes" type="object" class="oe_highlight" string="Cuotas pendientes"/>
+                    <button name="ver_vencidas" type="object" class="oe_highlight" string="Cuotas vencidas"/>
+                  </div>
+                  <group>
+                      <field name="name"/>
+                      <field name="partner_activos"/>
+                      <field name="cuotas_pendientes"/>
+                      <field name="total_efectivo_pendiente"/>
+                      <field name="efectivo_moroso"/>
+                  </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <record id="panel_admin_form_action" model="ir.actions.act_window">
+        <field name="name">Panel informacion</field>
+        <field name="res_model">panel.admin</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="panel_admin_tree"/>
+    </record>
+
+    <menuitem name="Panel" id="ver_pendientes" parent="account.menu_finance_receivables" 
+    action="panel_admin_form_action"/>
+
+    
+
+    <!-- Vista de pendientes -->
+    
+    <record model="ir.ui.view" id="ver_pendientes_view">
+      <field name="name">account.move.line.pendientes</field>
+      <field name="model">account.move.line</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="date_maturity"/>
+          <field name="partner_id"/>
+          <field name="amount_residual" sum="Total"/>
+        </tree>
+      </field>
+    </record>
+
   </data>
 </openerp>
