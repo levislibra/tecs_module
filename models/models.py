@@ -13,9 +13,21 @@ class ExtendsInvoice(models.Model):
 	monto_cuota = fields.Float('Monto cuota')
 	producto_id = fields.Many2one('product.product', 'Producto')
 	descripcion = fields.Char('Descripcion')
+	cuota_ids = fields.One2many('account.move.line', 'factura_id', 'Cuotas', compute='_compute_cuota_ids')
 	#payment_term_id = fields.Many2one('account.payment.term', 'Plazo de pago', compute='computar_plazo')
-
 	invoice_line_id = fields.Many2one('account.invoice.line', 'Linea de factura')
+
+	@api.one
+	def _compute_cuota_ids(self):
+		cr = self.env.cr
+		uid = self.env.uid
+		cuota_obj = self.pool.get('account.move.line')
+		cuota_ids = cuota_obj.search(cr, uid, [
+			('invoice_id', '=', self.id),
+			('debit', '>', 0),
+			])
+		self.cuota_ids = cuota_ids
+
 
 	@api.one
 	def actualizar(self):
@@ -145,13 +157,14 @@ class ExtendsInvoice(models.Model):
 				raise UserError("Debe Computar plazo, ya que el periodo de las cuotas no coinciden.")
 
 
-class AccountPayment(models.Model):
+	"""class AccountPayment(models.Model):
     # This OpenERP object inherits from cheques.de.terceros
     # to add a new float field
-    _inherit = 'account.payment'
     _name = 'account.payment'
+    _inherit = 'account.payment'
     
     apunte_contable_id = fields.Many2one('account.move.line', 'Cuota', domain="[('partner_id', '=', partner_id), ('account_id', '=', property_account_receivable_id), ('reconciled', '=', False), ('debit', '>', 0)]")
+    #apunte_contable_ids = fields.One2many('account.move.line', 'payment_cuota_id','Cuotas', domain="[('partner_id', '=', partner_id), ('account_id', '=', property_account_receivable_id), ('reconciled', '=', False), ('debit', '>', 0)]")
     property_account_receivable_id = fields.Many2one('account.account', 'Cuenta', compute='_compute_account_receivable')
 
     @api.one
@@ -164,16 +177,11 @@ class AccountPayment(models.Model):
     @api.onchange('apunte_contable_id')
     def compute_amount(self):
     	self.amount = self.apunte_contable_id.debit
+	"""
 
 class AccountMoveLine(models.Model):
-	_inherit = 'account.move.line'
 	_name = 'account.move.line'
+	_inherit = 'account.move.line'
 
-	_order = 'date_maturity desc'
-	_rec_name = 'display_name'
-	display_name = fields.Char('Name', compute='_compute_name')
-
-
-	@api.one
-	def _compute_name(self):
-		self.display_name = str(self.date_maturity) + ' ' + str(self.debit)
+	_order = 'date_maturity asc'
+	factura_id = fields.Many2one('account.invoice', 'Factura')
