@@ -3,7 +3,11 @@ user_panel,panel.admin,model_panel_admin,tecs_module.group_user,1,0,0,0
 user_payment,payment.term,account.model_account_payment_term,tecs_module.group_user,1,1,1,1
 user_payment_line,payment.term.line,account.model_account_payment_term_line,tecs_module.group_user,1,1,1,1
 user_product,product.product,product.model_product_product,tecs_module.group_user,1,1,1,1
+user_product_template,product.template,product.model_product_template,tecs_module.group_user,1,1,1,1
+user_product_price_history,product.price.history,product.model_product_price_history,tecs_module.group_user,1,1,1,1
 admin_panel,panel.admin,model_panel_admin,tecs_module.group_manager,1,1,1,1
 admin_payment,payment.term,account.model_account_payment_term,tecs_module.group_manager,1,1,1,1
 admin_payment_line,payment.term.line,account.model_account_payment_term_line,tecs_module.group_manager,1,1,1,1
-admin_product,product.product,product.model_product_product,tecs_module.group_user,1,1,1,1
+admin_product,product.product,product.model_product_product,tecs_module.group_manager,1,1,1,1
+admin_product_template,product.template,product.model_product_template,tecs_module.group_manager,1,1,1,1
+admin_product_price_history,product.price.history,product.model_product_price_history,tecs_module.group_manager,1,1,1,1
