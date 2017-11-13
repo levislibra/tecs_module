@@ -88,10 +88,10 @@
                   </div>
                   <group>
                       <field name="name"/>
-                      <field name="partner_activos"/>
+                      <field name="partner_activos" groups="tecs_module.group_manager"/>
                       <field name="cuotas_pendientes"/>
-                      <field name="total_efectivo_pendiente"/>
-                      <field name="efectivo_moroso"/>
+                      <field name="total_efectivo_pendiente" groups="tecs_module.group_manager"/>
+                      <field name="efectivo_moroso" groups="tecs_module.group_manager"/>
                   </group>
                 </sheet>
             </form>
@@ -119,7 +119,8 @@
         <tree>
           <field name="date_maturity"/>
           <field name="partner_id"/>
-          <field name="amount_residual" sum="Total"/>
+          <field name="amount_residual" sum="Total" groups="tecs_module.group_manager"/>
+          <field name="amount_residual" groups="tecs_module.group_user"/>
         </tree>
       </field>
     </record>
