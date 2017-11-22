@@ -155,7 +155,7 @@ class ExtendsInvoice(models.Model):
 	@api.one
 	@api.constrains('state')
 	def _check_values(self):
-		if self.state == 'open':
+		if self.state == 'open' and self.type == 'out_invoice':
 			if self.cuotas != len(self.payment_term_id.line_ids):
 				raise UserError("Debe Computar plazo, ya que la cantidad de cuotas no coinciden.")
 			if self.monto_cuota != self.payment_term_id.line_ids[0].value_amount:

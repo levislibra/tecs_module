@@ -190,7 +190,7 @@
           <field name="date_maturity"/>
           <field name="partner_id"/>
           <field name="amount_residual" sum="Total" groups="tecs_module.group_manager"/>
-          <!--<field name="amount_residual" groups="tecs_module.group_user"/>-->
+          <field name="amount_residual" groups="tecs_module.group_user"/>
           <field name="producto_id"/>
           <field name="invoice_id"/>
         </tree>
