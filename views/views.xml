@@ -15,6 +15,7 @@
           <field name="cuotas" attrs="{'readonly': [('state', '!=', 'draft')], 'required': True}"/>
           <field name="monto_cuota" attrs="{'readonly': [('state', '!=', 'draft')], 'required': True}"/>
           <field name="producto_id" attrs="{'readonly': [('state', '!=', 'draft')], 'required': True}"/>
+          <field name="precio_sugerido"/>
           <field name="descripcion" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
           <field name="invoice_line_id" invisible="1"/>
           <button name="computar_plazo" type="object" nolabel="1" invisible="1"/>
@@ -60,6 +61,73 @@
       </field>
     </record>
 
+    <!-- Vista Form Partner -->
+
+    <record id="partner_form_inherited"  model="ir.ui.view">
+      <field name="name">Extension Partner form</field>
+      <field name="model">res.partner</field>
+      <field name="inherit_id" ref="base.view_partner_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='website']" position='before'>
+          <field name="entre_calles"/>
+          <field name="facebook" widget='url'/>
+          <field name="score"/>
+        </xpath>
+
+        <xpath expr="//page[6]" position='after'>
+          <page string='DNI'>
+            <group>
+              <field name="dni_imagen"/>
+              <field name="dni_imagen2"/>
+            </group>
+          </page>
+        </xpath>
+
+
+        <xpath expr="//field[@name='fax']" position="attributes">
+          <attribute name="invisible">1</attribute>
+        </xpath>
+
+        <xpath expr="//field[@name='title']" position="attributes">
+          <attribute name="invisible">1</attribute>
+        </xpath>
+
+        <xpath expr="//field[@name='lang']" position="attributes">
+          <attribute name="invisible">1</attribute>
+        </xpath>
+
+        <xpath expr="//field[@name='child_ids']" position="attributes">
+          <attribute name="invisible">1</attribute>
+        </xpath>        
+
+        <xpath expr="//page[1]" position="attributes">
+          <attribute name="invisible">1</attribute>
+        </xpath>
+
+        <xpath expr="//page[2]" position="attributes">
+          <attribute name="invisible">1</attribute>
+        </xpath>
+
+        <xpath expr="//page[3]" position="attributes">
+          <attribute name="invisible">1</attribute>
+        </xpath>
+
+        <xpath expr="//page[4]" position="attributes">
+          <attribute name="invisible">1</attribute>
+        </xpath>
+
+        <xpath expr="//page[5]" position="attributes">
+          <attribute name="invisible">1</attribute>
+        </xpath>
+
+        <xpath expr="//page[6]" position="attributes">
+          <attribute name="invisible">1</attribute>
+        </xpath>
+
+
+      </field>
+    </record>
+
     <!-- Panel Admin -->
 
     <!-- Arbol -->
@@ -85,12 +153,14 @@
                   <div>
                     <button name="ver_pendientes" type="object" class="oe_highlight" string="Cuotas pendientes"/>
                     <button name="ver_vencidas" type="object" class="oe_highlight" string="Cuotas vencidas"/>
+                    <button name="ver_morosos" type="object" class="oe_highlight" string="Cuotas de morosos"/>
                   </div>
                   <group>
                       <field name="name"/>
                       <field name="partner_activos" groups="tecs_module.group_manager"/>
                       <field name="cuotas_pendientes"/>
                       <field name="total_efectivo_pendiente" groups="tecs_module.group_manager"/>
+                      <field name="efectivo_vencido" groups="tecs_module.group_manager"/>
                       <field name="efectivo_moroso" groups="tecs_module.group_manager"/>
                   </group>
                 </sheet>
@@ -120,10 +190,35 @@
           <field name="date_maturity"/>
           <field name="partner_id"/>
           <field name="amount_residual" sum="Total" groups="tecs_module.group_manager"/>
-          <field name="amount_residual" groups="tecs_module.group_user"/>
+          <!--<field name="amount_residual" groups="tecs_module.group_user"/>-->
+          <field name="producto_id"/>
+          <field name="invoice_id"/>
         </tree>
       </field>
     </record>
+
+    <!-- Vista de productos -->
+    
+    <record model="ir.ui.view" id="product_tree">
+      <field name="name">product.product.tree</field>
+      <field name="model">product.product</field>
+      <field name="arch" type="xml">
+        <tree editable="1">
+          <field name="name"/>
+          <field name="lst_price"/>
+        </tree>
+      </field>
+    </record>
+
+    <record id="product_action" model="ir.actions.act_window">
+        <field name="name">Lista de Productos</field>
+        <field name="res_model">product.product</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="product_tree"/>
+    </record>
+
+    <menuitem name="Productos" id="product_view" parent="account.menu_finance_receivables" 
+    action="product_action"/>
 
   </data>
 </openerp>
