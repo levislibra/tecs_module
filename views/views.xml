@@ -74,7 +74,7 @@
           <field name="score"/>
         </xpath>
 
-        <xpath expr="//page[6]" position='after'>
+        <xpath expr="//page[1]" position='before'>
           <page string='DNI'>
             <group>
               <field name="dni_imagen"/>
@@ -100,10 +100,6 @@
           <attribute name="invisible">1</attribute>
         </xpath>        
 
-        <xpath expr="//page[1]" position="attributes">
-          <attribute name="invisible">1</attribute>
-        </xpath>
-
         <xpath expr="//page[2]" position="attributes">
           <attribute name="invisible">1</attribute>
         </xpath>
@@ -121,6 +117,10 @@
         </xpath>
 
         <xpath expr="//page[6]" position="attributes">
+          <attribute name="invisible">1</attribute>
+        </xpath>
+
+        <xpath expr="//page[7]" position="attributes">
           <attribute name="invisible">1</attribute>
         </xpath>
 
@@ -219,6 +219,35 @@
 
     <menuitem name="Productos" id="product_view" parent="account.menu_finance_receivables" 
     action="product_action"/>
+
+    <!-- Vista de Pagos -->
+    
+    <record model="ir.ui.view" id="payment_tree">
+      <field name="name">account.payment.tree</field>
+      <field name="model">account.payment</field>
+      <field name="arch" type="xml">
+        <tree create="false">
+          <field name="payment_date"/>
+          <field name="name"/>
+          <field name="partner_id" string="Customer"/>
+          <field name="amount" sum="Amount"/>
+          <field name="state"/>
+          <field name="currency_id" invisible="1"/>
+          <field name="partner_type" invisible="1"/>
+        </tree>
+      </field>
+    </record>
+
+    <record id="payment_action" model="ir.actions.act_window">
+        <field name="name">Lista de Pagos</field>
+        <field name="res_model">account.payment</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="payment_tree"/>
+    </record>
+
+    <menuitem name="Pagos" id="payment_view" parent="account.menu_finance_receivables" 
+    action="payment_action"/>
+
 
   </data>
 </openerp>

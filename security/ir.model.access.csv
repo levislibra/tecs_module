@@ -1,6 +1,7 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 user_panel,panel.admin,model_panel_admin,tecs_module.group_user,1,0,0,0
-user_payment,payment.term,account.model_account_payment_term,tecs_module.group_user,1,0,0,0
+user_payment_term,payment.term,account.model_account_payment_term,tecs_module.group_user,1,0,0,0
+account.access_account_payment,account.payment,account.model_account_payment,tecs_module.group_user,1,0,0,0
 user_payment_line,payment.term.line,account.model_account_payment_term_line,tecs_module.group_user,1,0,0,0
 user_product,product.product,product.model_product_product,tecs_module.group_user,1,0,0,0
 user_product_template,product.template,product.model_product_template,tecs_module.group_user,1,0,0,0
@@ -15,5 +16,7 @@ admin_product_template,product.template,product.model_product_template,tecs_modu
 admin_product_price_history,product.price.history,product.model_product_price_history,tecs_module.group_manager,1,1,1,1
 admin_account_invoice,account.invoice,account.model_account_invoice,tecs_module.group_manager,1,1,1,1
 admin_account_invoice_tax,account.invoice.tax,account.model_account_invoice_tax,tecs_module.group_manager,1,1,1,1
+admin_account_full_reconcile,account.full.reconcile,account_full_reconcile.model_account_full_reconcile,tecs_module.group_manager,1,1,1,1
+admin_account_partial_reconcile,account.partial.reconcile,account.model_account_partial_reconcile,tecs_module.group_manager,1,1,1,1
 account.access_account_invoice_uinvoice,account.invoice,account.model_account_invoice,account.group_account_invoice,1,0,0,0
 account.access_account_invoice_group_invoice,account.invoice,account.model_account_invoice,account.group_account_invoice,1,0,0,0
