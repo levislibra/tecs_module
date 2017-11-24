@@ -14,6 +14,6 @@ admin_product,product.product,product.model_product_product,tecs_module.group_ma
 admin_product_template,product.template,product.model_product_template,tecs_module.group_manager,1,1,1,1
 admin_product_price_history,product.price.history,product.model_product_price_history,tecs_module.group_manager,1,1,1,1
 admin_account_invoice,account.invoice,account.model_account_invoice,tecs_module.group_manager,1,1,1,1
-admin_account_invoice_tax,account.invoice.tax,account.model_account_invoice_tax,tecs_module.group_manager,1,0,0,0
+admin_account_invoice_tax,account.invoice.tax,account.model_account_invoice_tax,tecs_module.group_manager,1,1,1,1
 account.access_account_invoice_uinvoice,account.invoice,account.model_account_invoice,account.group_account_invoice,1,0,0,0
 account.access_account_invoice_group_invoice,account.invoice,account.model_account_invoice,account.group_account_invoice,1,0,0,0
