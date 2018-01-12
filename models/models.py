@@ -40,17 +40,13 @@ class ExtendsInvoice(models.Model):
 
 	@api.one
 	def actualizar(self):
-		print self.producto_id
 		if len(self.producto_id) > 0:
-			print "producto != False"
 			if self.descripcion and len(self.descripcion) > 0:
 				descripcion = self.descripcion
 			else:
 				descripcion = self.producto_id.name
 
-			print len(self.invoice_line_id)
 			if len(self.invoice_line_id) == 0:
-				print "creando el AIL"
 				"""
 				ail = self.env['account.invoice.line'].create({
 					'product_id': self.producto_id.id,
@@ -74,7 +70,6 @@ class ExtendsInvoice(models.Model):
 				self.invoice_line_ids = [(0,0,ail)]
 				self.invoice_line_id = self.invoice_line_ids[0].id
 			else:
-				print "Actualizando el AIL"
 				self.invoice_line_id.product_id = self.producto_id.id
 				self.invoice_line_id.name = descripcion
 				self.invoice_line_id.price_unit = self.cuotas * self.monto_cuota
@@ -101,7 +96,6 @@ class ExtendsInvoice(models.Model):
 		i = 0
 		ptl_ids = []
 		while i < self.cuotas:
-			print self.dias_periodo() * i
 			if i != (self.cuotas-1):
 				ptl = {
 					'option': 'day_after_invoice_date',
@@ -124,13 +118,9 @@ class ExtendsInvoice(models.Model):
 
 	@api.one
 	def computar_plazo(self):
-		print "computar plazo"
-		print self.payment_term_id
-		print self.periodo
 		name = str(self.cuotas) + " cuotas " + str(self.periodo)
 		if len(self.payment_term_id) == 0:
 			#Creamos el termino de pago
-			print "Creamos el term payment"
 			company_id = self.env['res.users'].browse(self.env.uid).company_id.id
 			pti = self.env['account.payment.term'].create({
 					'name': name,
@@ -138,12 +128,10 @@ class ExtendsInvoice(models.Model):
 					'active': True,
 				})
 			self.payment_term_id = pti.id
-			print self.payment_term_id
 			self.delete_payment_term_line()
 			self.create_payment_term_line()
 		else:
 			#Actualizamos el termino de pago
-			print "Actualizamos payment term"
 			self.payment_term_id.name = name
 			self.delete_payment_term_line()
 			self.create_payment_term_line()
@@ -221,6 +209,8 @@ class PanelAdmin(models.Model):
 
 	@api.one
 	def _compute_total_efectivo_pendiente(self):
+		fecha_actual = datetime.now()
+		fecha_morosos = fecha_actual - timedelta(days=30)
 		total_efectivo_pendiente = 0
 		cr = self.env.cr
 		uid = self.env.uid
@@ -229,6 +219,7 @@ class PanelAdmin(models.Model):
 			('amount_residual', '>', 0.0),
 			('invoice_id', '!=', None),
 			('reconciled', '=', False),
+			('date_maturity', '>=', fecha_morosos),
 			])
 		for cuota_id in cuota_ids:
 			cuota_obj_id = cuota_obj.browse(cr, uid, cuota_id)
@@ -246,7 +237,7 @@ class PanelAdmin(models.Model):
 			('amount_residual', '>', 0.0),
 			('invoice_id', '!=', None),
 			('reconciled', '=', False),
-			('date_maturity', '<', fecha_actual),
+			('date_maturity', '<=', fecha_actual),
 			])
 		for cuota_id in cuota_ids:
 			cuota_obj_id = cuota_obj.browse(cr, uid, cuota_id)
@@ -272,11 +263,14 @@ class PanelAdmin(models.Model):
 		self.efectivo_moroso = efectivo_moroso
 
 	def ver_pendientes(self, cr, uid, ids, context=None):
+		fecha_actual = datetime.now()
+		fecha_morosos = fecha_actual - timedelta(days=30)
 		pendientes_obj = self.pool.get('account.move.line')
 		pendientes_ids = pendientes_obj.search(cr, uid, [
 			('amount_residual', '>', 0.0),
 			('invoice_id', '!=', None),
 			('reconciled', '=', False),
+			('date_maturity', '>=', fecha_morosos),
 			])
 
 		model_obj = self.pool.get('ir.model.data')
@@ -299,7 +293,7 @@ class PanelAdmin(models.Model):
 			('amount_residual', '>', 0.0),
 			('invoice_id', '!=', None),
 			('reconciled', '=', False),
-			('date_maturity', '<', fecha_actual),
+			('date_maturity', '<=', fecha_actual),
 			])
 
 		model_obj = self.pool.get('ir.model.data')
@@ -307,7 +301,7 @@ class PanelAdmin(models.Model):
 		view_id = model_obj.browse(cr, uid, data_id, context=None).res_id
 		return {
 			'domain': "[('id', 'in', ["+','.join(map(str, pendientes_ids))+"])]",
-			'name': ('Pendientes'),
+			'name': ('Vencidas'),
 			'view_type': 'form',
 			'view_mode': 'tree',
 			'res_model': 'account.move.line',
@@ -318,8 +312,6 @@ class PanelAdmin(models.Model):
 	def ver_morosos(self, cr, uid, ids, context=None):
 		fecha_actual = datetime.now()
 		fecha_morosos = fecha_actual - timedelta(days=30)
-		print fecha_actual
-		print fecha_morosos
 		pendientes_obj = self.pool.get('account.move.line')
 		pendientes_ids = pendientes_obj.search(cr, uid, [
 			('amount_residual', '>', 0.0),
@@ -331,9 +323,10 @@ class PanelAdmin(models.Model):
 		model_obj = self.pool.get('ir.model.data')
 		data_id = model_obj._get_id(cr, uid, 'tecs_module', 'ver_pendientes_view')
 		view_id = model_obj.browse(cr, uid, data_id, context=None).res_id
+		context = {'state_mora': 'moroso'}
 		return {
 			'domain': "[('id', 'in', ["+','.join(map(str, pendientes_ids))+"])]",
-			'name': ('Pendientes'),
+			'name': ('Morosos'),
 			'view_type': 'form',
 			'view_mode': 'tree',
 			'res_model': 'account.move.line',
