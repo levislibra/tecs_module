@@ -110,7 +110,6 @@
           </page>
         </xpath>
 
-
         <xpath expr="//field[@name='fax']" position="attributes">
           <attribute name="invisible">1</attribute>
         </xpath>
@@ -151,7 +150,23 @@
           <attribute name="invisible">1</attribute>
         </xpath>
 
-
+        <xpath expr="//page[1]" position="after">
+          <page string="Historial de compras">
+            <field name="invoice_ids" domain="[('state', '=', 'paid')]">
+              <tree>
+                <field name="date_invoice"/>
+                <field name="number"/>
+                <field name="producto_id"/>
+                <field name="periodo"/>
+                <field name="cuotas"/>
+                <field name="monto_cuota"/>
+                <field name="amount_total_signed" sum="Total"/>
+                <field name="residual_signed" sum="Amount due"/>
+                <field name="state"/>
+              </tree>
+            </field>
+          </page>
+        </xpath>
       </field>
     </record>
 
