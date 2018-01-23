@@ -4,6 +4,7 @@ from openerp import models, fields, api
 from openerp.exceptions import UserError
 from openerp.exceptions import ValidationError
 from datetime import datetime, timedelta
+import amount_to_text_es_MX
 
 class ExtendsInvoice(models.Model):
 	_name = 'account.invoice'
@@ -37,6 +38,9 @@ class ExtendsInvoice(models.Model):
 			])
 		self.cuota_ids = cuota_ids
 
+	@api.multi
+	def amount_to_text(self):
+		return amount_to_text_es_MX.get_amount_to_text(self, self.monto_cuota, 'centavos', 'pesos con ')
 
 	@api.one
 	def actualizar(self):
@@ -345,3 +349,17 @@ class ResPartner(models.Model):
 	dni_imagen2 = fields.Binary('DNI posterior')
 	facebook = fields.Char('Facebook')
 	score = fields.Float('Score')
+
+class AccountPayment(models.Model):
+	_name = 'account.payment'
+	_inherit = 'account.payment'
+
+	producto_id = fields.Char('Producto', compute="_compute_producto")
+
+	@api.one
+	def _compute_producto(self):
+		self.producto_id = self.invoice_ids[0].producto_id.name
+
+	@api.multi
+	def amount_to_text(self):
+		return amount_to_text_es_MX.get_amount_to_text(self, self.amount, 'centavos', 'pesos con ')

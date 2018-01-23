@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Custom report-->
+<openerp>
+<data>
+    <template id="payment_print">
+        <t t-call="report.external_layout">
+            <t t-foreach="docs" t-as="o">
+            <div class="page">
+                <br/><br/>
+
+                <h2>
+                    <span>Recibo para el cliente</span>
+                </h2>
+                <div class="pull-right">
+                    <div class="col-xs-4 pull-right">
+                        <table class="table table-condensed">
+                            <tr>
+                                <td><strong>Recibo Nro</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong><span t-field="o.display_name"/></strong></td>
+                            </tr>
+                        </table>
+                   </div>
+               </div>
+
+                   <br/><br/>
+
+                <p><strong>Fecha de emision: </strong><span t-field="o.payment_date" t-field-options="{&quot;format&quot;: &quot;dd 'de' MMMM 'de' yyyy&quot;}" />.</p>
+                <p>Recibi del Señor/ra <span t-field="o.partner_id"/>, la suma de: <span t-esc="o.amount_to_text()"/> (<span t-field="o.amount"  t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>).-</p>
+                <p>En concepto de cuota numero:_____, por el producto <span t-field="o.producto_id"/>.</p>
+
+                <br/><br/><br/><br/>
+                <div class="row">
+                    <div class="col-xs-4 pull-right">
+                        <table class="table table-condensed">
+                            <tr class="border-black">
+                                <td><strong>Firma</strong></td>
+                            </tr>
+                            <tr style="height:30px;">
+                            </tr>
+                            <tr class="border-black">
+                                <td><strong>Aclaracion</strong></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+
+            </div>
+            </t>
+        </t>
+    </template>
+
+    <template id="invoice_payment_generic">
+        <t t-call="report.external_layout">
+            <t t-foreach="docs" t-as="o">
+            <div class="page">
+                <br/><br/><br/><br/>
+
+                <h2>
+                    <span>Recibo para el cliente</span>
+                </h2>
+
+                <p><strong>Fecha de emision: </strong><span t-field="o.__last_update" t-field-options='{"format": "d MMMM y"}'/>.</p>
+                <p>Recibi de: <span t-field="o.partner_id"/>, la suma de: <span t-esc="o.amount_to_text()"/> (<span t-field="o.monto_cuota"  t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>).-</p>
+                <p>En concepto de cuota numero:_____, por el producto <span t-field="o.producto_id"/>.</p><br/><br/><br/>
+                <p>Proximos vencimientos</p>
+                <table class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <th style="width:35%;">Descripcion</th>
+                            <th style="width:15%;">Deuda</th>
+                        </tr>
+                    </thead>
+                    <tbody class="invoice_tbody">
+                        <tr t-foreach="o.cuota_ids" t-as="l">
+                            <td t-if="l.amount_residual > 0" style="width:25%;"><span t-field="l.date_maturity"/></td>
+                            <td t-if="l.amount_residual > 0" style="width:15%;"><span t-field="l.amount_residual"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+                <p t-if="o.comment">
+                    <strong>Comentario:</strong>
+                    <span t-field="o.comment"/>
+                </p>
+                <p t-if="o.payment_term_id">
+                    <strong>Forma de pago:</strong>
+                    <span t-field="o.payment_term_id"/>
+                </p>
+
+                <br/><br/><br/><br/>
+                <div class="row">
+                    <div class="col-xs-4 pull-right">
+                        <table class="table table-condensed">
+                            <tr class="border-black">
+                                <td><strong>Firma</strong></td>
+                            </tr>
+                            <tr style="height:30px;">
+                            </tr>
+                            <tr class="border-black">
+                                <td><strong>Aclaracion</strong></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+
+            </div>
+            </t>
+        </t>
+    </template>
+</data>
+</openerp>

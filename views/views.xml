@@ -54,6 +54,25 @@
             </field>
           </page>
         </xpath>
+        <xpath expr="//page[2]" position="after">
+          <page string="Pagos del cliente">
+            <field name="payment_ids">
+              <form>
+                <header>
+                  <button name="%(tecs_module.custom_payment_print)d" string="Imprimir comprobante" type="action" icon="gtk-print"/>
+                </header>
+                <sheet>
+                  <group>
+                    <field name="payment_date"/>
+                    <field name="amount" widget="monetary"/>
+                    <field name="display_name"/>
+                  </group>
+                </sheet>
+              </form>
+            </field>
+          </page>
+        </xpath>
+
       </field>
     </record>
 

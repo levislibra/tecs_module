@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<report 
+		        id="custom_invoice_payment_generic"
+		        model="account.invoice"
+		        string="Comprobante de pago"
+		        report_type="qweb-pdf"
+		        name="tecs_module.invoice_payment_generic"
+		        attachment_use="False"
+		        file="tecs_module.invoice_payment_generic"
+		    />
+	    <report 
+		        id="custom_payment_print"
+		        model="account.payment"
+		        string="Imprimir comprobante"
+		        report_type="qweb-pdf"
+		        name="tecs_module.payment_print"
+		        attachment_use="False"
+		        file="tecs_module.payment_print"
+		    />
+	</data>
+</openerp>
