@@ -6,6 +6,9 @@
       <field name="model">account.invoice</field>
       <field name="inherit_id" ref="account.invoice_form"/>
       <field name="arch" type="xml">
+        <xpath expr="//field[@name='partner_id']" position='attributes'>
+          <attribute name="domain">[('state', '!=', 'no_vender')]</attribute>
+        </xpath>
         <xpath expr="//field[@name='partner_id']" position='after'>
           <field name="periodo" attrs="{'readonly': [('state', '!=', 'draft')], 'required': True}"/>
           <field name="cuotas" attrs="{'readonly': [('state', '!=', 'draft')], 'required': True}"/>
@@ -114,6 +117,13 @@
       <field name="model">res.partner</field>
       <field name="inherit_id" ref="base.view_partner_form"/>
       <field name="arch" type="xml">
+        <xpath expr="/form/*" position="before">
+          <header>
+            <button name="confirm" class="oe_highlight" attrs="{'invisible': [('state', '=', 'confirm')]}" string="Confirmar" type="object" />
+            <button name="no_vender" attrs="{'invisible': [('state', '=', 'no_vender')]}" string="No Vender" type="object" />
+            <field name="state" widget="statusbar"/>
+          </header>
+        </xpath>
         <xpath expr="//field[@name='website']" position='before'>
           <field name="entre_calles"/>
           <field name="facebook" widget='url'/>

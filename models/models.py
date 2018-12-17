@@ -349,6 +349,15 @@ class ResPartner(models.Model):
 	dni_imagen2 = fields.Binary('DNI posterior')
 	facebook = fields.Char('Facebook')
 	score = fields.Float('Score')
+	state = fields.Selection([('confirm', 'Confirmado'), ('no_vender', 'No vender')], string='Estado', readonly=True, default='confirm')
+
+	def confirm(self, cr, uid, ids, context=None):
+		self.write(cr, uid, ids, {'state':'confirm'}, context=None)
+		return True
+
+	def no_vender(self, cr, uid, ids, context=None):
+		self.write(cr, uid, ids, {'state':'no_vender'}, context=None)
+		return True
 
 class AccountPayment(models.Model):
 	_name = 'account.payment'

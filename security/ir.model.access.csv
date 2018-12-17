@@ -19,4 +19,3 @@ admin_account_invoice_tax,account.invoice.tax,account.model_account_invoice_tax,
 admin_account_full_reconcile,account.full.reconcile,account_full_reconcile.model_account_full_reconcile,tecs_module.group_manager,1,1,1,1
 admin_account_partial_reconcile,account.partial.reconcile,account.model_account_partial_reconcile,tecs_module.group_manager,1,1,1,1
 account.access_account_invoice_uinvoice,account.invoice,account.model_account_invoice,account.group_account_invoice,1,0,0,0
-account.access_account_invoice_group_invoice,account.invoice,account.model_account_invoice,account.group_account_invoice,1,0,0,0
