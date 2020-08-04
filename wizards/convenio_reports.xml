@@ -39,13 +39,54 @@ En caso de no respetar los términos acordados la empresa podrá optar por:<br/>
 <b>4 cuarta</b>- Presentarse con la fuerza pública para la restitución del articulo y en caso de no llegar a un acuerdo realizar la denuncia correspondiente por el delito que el juez civil de a lugar, así mismo embargara sus bienes y esto le impidiera al deudor disponer de ellos como también cobrar por banco planes sociales o transferencias de terceros<br/><br/>
 
 Se deja copia al cliente de dicho acuerdo y firma conforme a la aceptación del mismo.<br/><br/>
-Deudor<br/><br/>
+<br/><br/>
+<table class="table table-condensed" style="width:40%;" align="left">
+	<thead>
+		<tr>
+			<th></th>
+			<th style="width:10%;"></th>
+			<th></th>
+			<th style="width:10%;"></th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody class="invoice_tbody">
+		<tr align="center">
+			<td>Firma</td>
+			<td></td>
+			<td>Aclaracion</td>
+			<td></td>
+			<td>DNI</td>
+		</tr>
+	</tbody>
+</table>
+<table class="table table-condensed" style="width:40%;" align="right">
+	<thead>
+		<tr>
+			<th></th>
+			<th style="width:10%;"></th>
+			<th></th>
+			<th style="width:10%;"></th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody class="invoice_tbody">
+		<tr align="center">
+			<td>Firma Co Deudor</td>
+			<td></td>
+			<td>Aclaracion Co Deudor</td>
+			<td></td>
+			<td>DNI Co Deudor</td>
+		</tr>
+	</tbody>
+</table>
+<!-- Deudor<br/><br/>
 Acreedor<br/><br/>
 
 Nombre y apellido:<br/><br/>
 FIRMA:<br/><br/>
 T.E.C.S®
-Todo en cuotas semanales
+Todo en cuotas semanales -->
 					</div>
                 </div>
             </t>
@@ -65,13 +106,13 @@ Todo en cuotas semanales
 <template id="ficha_view">
 	<t t-call="report.external_layout">
 		<t t-foreach="docs" t-as="o">
-			<div class="page" style="font-size:16px;">
+			<div class="page" style="font-size:16px;align:center;">
 				<div align="center" style="font-size:16px;">
 					<b></b>
 				</div>
-				<table class="table table-hover table-striped" border="1" style="width:60%;align:center"> 
+				<table class="table table-hover table-striped" border="1"> 
 					<tr>
-						<table class="table table-hover table-striped" style="width:60%;"> 
+						<table class="table table-hover table-striped" style="width:60%;margin-left:auto;margin-right:auto;"> 
 							<tr>
 								<td style="font-weight:bold;width:20%;">Nombre</td>
 								<td style="align:left;"><span t-field="o.nombre"/></td>
@@ -79,7 +120,7 @@ Todo en cuotas semanales
 						</table>
 					</tr>
 					<tr>
-						<table class="table table-hover table-striped" border="1" style="width:60%;"> 
+						<table class="table table-hover table-striped" border="1" style="width:60%;margin-left:auto;margin-right:auto;"> 
 							<tr>
 								<td style="font-weight:bold;width:20%;">DNI</td>
 								<td style="align:left;"><span t-field="o.dni"/></td>
@@ -89,7 +130,7 @@ Todo en cuotas semanales
 						</table>
 					</tr>
 					<tr>
-						<table class="table table-hover table-striped" border="1" style="width:60%;"> 
+						<table class="table table-hover table-striped" border="1" style="width:60%;margin-left:auto;margin-right:auto;"> 
 							<tr>
 								<td style="font-weight:bold;width:20%;">Direccion</td>
 								<td style="align:left;width:30%;"><span t-field="o.calle"/></td>
@@ -99,7 +140,7 @@ Todo en cuotas semanales
 						</table>
 					</tr>
 					<tr>
-						<table class="table table-hover table-striped" border="1" style="width:60%;"> 
+						<table class="table table-hover table-striped" border="1" style="width:60%;margin-left:auto;margin-right:auto;"> 
 							<tr>
 								<td style="font-weight:bold;width:20%;">Entre calles</td>
 								<td style="align:left;"><span t-field="o.entre_calles"/></td>
@@ -107,7 +148,7 @@ Todo en cuotas semanales
 						</table>
 					</tr>
 					<tr>
-						<table class="table table-hover table-striped" border="1" style="width:60%;"> 
+						<table class="table table-hover table-striped" border="1" style="width:60%;margin-left:auto;margin-right:auto;"> 
 							<tr>
 								<td style="font-weight:bold;width:20%;">Localidad</td>
 								<td style="align:left;width:30%;"><span t-field="o.localidad"/></td>
@@ -117,7 +158,7 @@ Todo en cuotas semanales
 						</table>
 					</tr>
 					<tr>
-						<table class="table table-hover table-striped" border="1" style="width:60%;"> 
+						<table class="table table-hover table-striped" border="1" style="width:60%;margin-left:auto;margin-right:auto;"> 
 							<tr>
 								<td style="font-weight:bold;width:20%;">Direccion 2</td>
 								<td style="align:left;"><span t-field="o.direccion2"/></td>
@@ -125,7 +166,7 @@ Todo en cuotas semanales
 						</table>
 					</tr>
 					<tr>
-						<table class="table table-hover table-striped" border="1" style="width:60%;"> 
+						<table class="table table-hover table-striped" border="1" style="width:60%;margin-left:auto;margin-right:auto;"> 
 							<tr>
 								<td style="font-weight:bold;width:20%;">Cel</td>
 								<td style="align:left;width:30%;"><span t-field="o.cel"/></td>
@@ -135,7 +176,7 @@ Todo en cuotas semanales
 						</table>
 					</tr>
 					<tr>
-						<table class="table table-hover table-striped" border="1" style="width:60%;"> 
+						<table class="table table-hover table-striped" border="1" style="width:60%;margin-left:auto;margin-right:auto;"> 
 							<tr>
 								<td style="font-weight:bold;width:20%;">Facebook</td>
 								<td style="align:left;width:30%;"><span t-field="o.facebook"/></td>
@@ -145,7 +186,7 @@ Todo en cuotas semanales
 						</table>
 					</tr>
 					<tr>
-						<table class="table table-hover table-striped" border="1" style="width:60%;"> 
+						<table class="table table-hover table-striped" border="1" style="width:60%;margin-left:auto;margin-right:auto;"> 
 							<tr>
 								<td style="font-weight:bold;width:20%;">Articulo</td>
 								<td style="align:left;width:30%;"><span t-field="o.articulo"/></td>
@@ -155,7 +196,7 @@ Todo en cuotas semanales
 						</table>
 					</tr>
 					<tr>
-						<table class="table table-hover table-striped" border="1" style="width:60%;"> 
+						<table class="table table-hover table-striped" border="1" style="width:60%;margin-left:auto;margin-right:auto;"> 
 							<tr>
 								<td style="font-weight:bold;width:20%;">Forma de pago</td>
 								<td style="align:left;"><span t-field="o.forma_pago"/></td>
