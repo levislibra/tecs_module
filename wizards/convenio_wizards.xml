@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- Editar Limite credito -->
+
+    <record id="convenio_wizard" model="ir.ui.view">
+        <field name="name">Convenio</field>
+        <field name="model">convenio.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+					<group>
+						<label string="Fecha"/>
+						<div>
+							<field name="dia" placeholder="Dia"/>
+							<field name="mes" placeholder="Mes"/>
+							<field name="ano" placeholder="Año"/>
+						</div>
+						<field name="nombre" />
+						<field name="dni" />
+						<field name="ocupacion" />
+						<field name="calle" />
+						<field name="numero" />
+						<field name="entre_calles" />
+						<field name="partido" />
+						<field name="localidad" />
+						<field name="direccion2" />
+						<field name="cel" />
+						<field name="tel2" />
+						<field name="facebook" />
+						<field name="email" />
+						<field name="forma_pago" />
+						<field name="articulo" />
+						<field name="marca" />
+						<field name="suma_inicial" />
+						<field name="plazo" />
+						<field name="forma_de_cuotas" />
+						<field name="cantidad_cuotas" />
+						<field name="monto_cuotas" />
+					</group>
+					<group></group>
+                </group>
+            </form>
+        </field>
+    </record>
+
+	<record model="ir.actions.act_window" id="convenio_action">
+		<field name="name">Convenio de pago</field>
+		<field name="res_model">convenio.wizard</field>
+		<field name="view_mode">form</field>
+		<field name="view_id" ref="convenio_wizard"/>
+	  </record>
+
+	  <menuitem name="Documentacion" id="menu_documentacion"/>
+	  <menuitem name="Convenio de pago" id="menu_convenio" parent="menu_documentacion" action="convenio_action"/>
+
+</odoo>

@@ -25,6 +25,8 @@
     'data': [
         'security/user_groups.xml',
         'views/views.xml',
+        'wizards/convenio_wizards.xml',
+        'wizards/convenio_reports.xml',
         'views/reports.xml',
         'tecs_module_report.xml',
         'security/ir.model.access.csv',

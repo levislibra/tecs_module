@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Custom report-->
+<openerp>
+<data>
+    <!-- Recibo de cobro del cliente -->
+
+    <report 
+        id="convenio_report"
+        model="convenio.wizard"
+        string="Convenio de Pago"
+        report_type="qweb-pdf"
+        name="tecs_module.convenio_view"
+        attachment_use="True"
+        file="tecs_module.convenio_view"
+    />
+
+    <template id="convenio_view">
+        <t t-call="report.external_layout">
+            <t t-foreach="docs" t-as="o">
+                <div class="page" style="font-size:16px;">
+                    <div align="center" style="font-size:16px;">
+                        <b>Convenio de pago</b>
+                    </div>
+                    <div style="font-size:18px;">
+El día <span t-field="o.dia"/> de <span t-field="o.mes"/> de <span t-field="o.ano"/>. El señor/a <b><span t-field="o.nombre"/></b> DNI <span t-field="o.dni"/> quien dice estar Domiciliado actualmente en la calle <span t-field="o.calle"/> N <span t-field="o.numero"/> entre <span t-field="o.entre_calles"/> Partido de <span t-field="o.partido"/> Buenos Aires Argentina. Celebra allí un acuerdo entre partes con fines de compra a 
+TECS (20-33840572-4) y Recibe de Forma inmediata el articulo <span t-field="o.articulo"/> marca <span t-field="o.marca"/> y se compromete a cancelar su totalidad De la siguiente manera:
+Abonar la suma de ($<span t-field="o.suma_inicial"/>) al recibir el articulo y en un plazo no mayor a (<span t-field="o.plazo"/>) Días hábiles a partir del día de la fecha cancelar en forma de cuota: (<span t-field="o.forma_de_cuotas"/>) la cantidad de (<span t-field="o.cantidad_cuotas"/>)cuotas en un valor de ($<span t-field="o.monto_cuotas"/>) pesos ArsC/u<br/><br/>
+
+Que podrá abonar a través de la empresa PagosPyme en cualquier sucursal de Pago-Fácil<br/><br/>
+
+En caso de no respetar los términos acordados la empresa podrá optar por:<br/><br/>
+
+<b>1 primera</b>- Cobrar un <b>%20</b> del valor de cada cuota por cada semana adeudada a partir de su fecha formal de pago hasta cancelar la totalidad más intereses.<br/><br/>
+
+<b>2 segunda</b>- Podrá proceder al retiro del artículo dejando sin efecto la cantidad de cuotas canceladas al día de la fecha dando por terminado el convenio luego de la devolución del artículo entregado en condiciones óptimas y con sus respectivos accesorios iniciales<br/><br/>
+
+<b>3 tercera</b>- Vender la deuda a una empresa de cobros desvinculándose del cliente y este realizar las acciones correspondientes para el cobro de dicha deuda<br/><br/>
+
+<b>4 cuarta</b>- Presentarse con la fuerza pública para la restitución del articulo y en caso de no llegar a un acuerdo realizar la denuncia correspondiente por el delito que el juez civil de a lugar, así mismo embargara sus bienes y esto le impidiera al deudor disponer de ellos como también cobrar por banco planes sociales o transferencias de terceros<br/><br/>
+
+Se deja copia al cliente de dicho acuerdo y firma conforme a la aceptación del mismo.<br/><br/>
+Deudor<br/><br/>
+Acreedor<br/><br/>
+
+Nombre y apellido:<br/><br/>
+FIRMA:<br/><br/>
+T.E.C.S®
+Todo en cuotas semanales
+					</div>
+                </div>
+            </t>
+        </t>
+	</template>
+	
+	<report 
+	id="ficha_report"
+	model="convenio.wizard"
+	string="Ficha de Pago"
+	report_type="qweb-pdf"
+	name="tecs_module.ficha_view"
+	attachment_use="True"
+	file="tecs_module.ficha_view"
+/>
+
+<template id="ficha_view">
+	<t t-call="report.external_layout">
+		<t t-foreach="docs" t-as="o">
+			<div class="page" style="font-size:16px;">
+				<div align="center" style="font-size:16px;">
+					<b></b>
+				</div>
+				<table class="table table-hover table-striped" border="1" style="width:60%;align:center"> 
+					<tr>
+						<table class="table table-hover table-striped" style="width:60%;"> 
+							<tr>
+								<td style="font-weight:bold;width:20%;">Nombre</td>
+								<td style="align:left;"><span t-field="o.nombre"/></td>
+							</tr>
+						</table>
+					</tr>
+					<tr>
+						<table class="table table-hover table-striped" border="1" style="width:60%;"> 
+							<tr>
+								<td style="font-weight:bold;width:20%;">DNI</td>
+								<td style="align:left;"><span t-field="o.dni"/></td>
+								<td style="font-weight:bold;width:20%;">Ocupacion</td>
+								<td style="align:left;"><span t-field="o.ocupacion"/></td>	
+							</tr>
+						</table>
+					</tr>
+					<tr>
+						<table class="table table-hover table-striped" border="1" style="width:60%;"> 
+							<tr>
+								<td style="font-weight:bold;width:20%;">Direccion</td>
+								<td style="align:left;width:30%;"><span t-field="o.calle"/></td>
+								<td style="font-weight:bold;width:20%;">Numero</td>
+								<td style="align:left;width:30%;"><span t-field="o.numero"/></td>	
+							</tr>
+						</table>
+					</tr>
+					<tr>
+						<table class="table table-hover table-striped" border="1" style="width:60%;"> 
+							<tr>
+								<td style="font-weight:bold;width:20%;">Entre calles</td>
+								<td style="align:left;"><span t-field="o.entre_calles"/></td>
+							</tr>
+						</table>
+					</tr>
+					<tr>
+						<table class="table table-hover table-striped" border="1" style="width:60%;"> 
+							<tr>
+								<td style="font-weight:bold;width:20%;">Localidad</td>
+								<td style="align:left;width:30%;"><span t-field="o.localidad"/></td>
+								<td style="font-weight:bold;width:20%;">Partido</td>
+								<td style="align:left;width:30%;"><span t-field="o.partido"/></td>	
+							</tr>
+						</table>
+					</tr>
+					<tr>
+						<table class="table table-hover table-striped" border="1" style="width:60%;"> 
+							<tr>
+								<td style="font-weight:bold;width:20%;">Direccion 2</td>
+								<td style="align:left;"><span t-field="o.direccion2"/></td>
+							</tr>
+						</table>
+					</tr>
+					<tr>
+						<table class="table table-hover table-striped" border="1" style="width:60%;"> 
+							<tr>
+								<td style="font-weight:bold;width:20%;">Cel</td>
+								<td style="align:left;width:30%;"><span t-field="o.cel"/></td>
+								<td style="font-weight:bold;width:20%;">Telefono</td>
+								<td style="align:left;width:30%;"><span t-field="o.tel2"/></td>	
+							</tr>
+						</table>
+					</tr>
+					<tr>
+						<table class="table table-hover table-striped" border="1" style="width:60%;"> 
+							<tr>
+								<td style="font-weight:bold;width:20%;">Facebook</td>
+								<td style="align:left;width:30%;"><span t-field="o.facebook"/></td>
+								<td style="font-weight:bold;width:20%;">Email</td>
+								<td style="align:left;width:30%;"><span t-field="o.email"/></td>	
+							</tr>
+						</table>
+					</tr>
+					<tr>
+						<table class="table table-hover table-striped" border="1" style="width:60%;"> 
+							<tr>
+								<td style="font-weight:bold;width:20%;">Articulo</td>
+								<td style="align:left;width:30%;"><span t-field="o.articulo"/></td>
+								<td style="font-weight:bold;width:20%;">Cuotas</td>
+								<td style="align:left;width:30%;"><span t-field="o.forma_de_cuotas"/></td>	
+							</tr>
+						</table>
+					</tr>
+					<tr>
+						<table class="table table-hover table-striped" border="1" style="width:60%;"> 
+							<tr>
+								<td style="font-weight:bold;width:20%;">Forma de pago</td>
+								<td style="align:left;"><span t-field="o.forma_pago"/></td>
+							</tr>
+						</table>
+					</tr>
+				</table>
+
+			</div>
+		</t>
+	</t>
+</template>
+
+</data>
+</openerp>
