@@ -18,18 +18,18 @@
 						</div>
 						<field name="nombre" />
 						<field name="dni" />
-						<field name="ocupacion" />
+						<!-- <field name="ocupacion" /> -->
 						<field name="calle" />
 						<field name="numero" />
 						<field name="entre_calles" />
 						<field name="partido" />
-						<field name="localidad" />
-						<field name="direccion2" />
+						<!-- <field name="localidad" /> -->
+						<!-- <field name="direccion2" /> -->
 						<field name="cel" />
-						<field name="tel2" />
-						<field name="facebook" />
-						<field name="email" />
-						<field name="forma_pago" />
+						<!-- <field name="tel2" /> -->
+						<!-- <field name="facebook" /> -->
+						<!-- <field name="email" /> -->
+						<!-- <field name="forma_pago" /> -->
 						<field name="articulo" />
 						<field name="marca" />
 						<field name="suma_inicial" />

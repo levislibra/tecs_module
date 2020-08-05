@@ -18,13 +18,13 @@
         <t t-call="report.external_layout">
             <t t-foreach="docs" t-as="o">
                 <div class="page" style="font-size:16px;">
-                    <div align="center" style="font-size:16px;">
+                    <div align="center" style="font-size:20px;">
                         <b>Convenio de pago</b>
                     </div>
-                    <div style="font-size:18px;">
+                    <div style="font-size:18px;text-align:justify">
 El día <span t-field="o.dia"/> de <span t-field="o.mes"/> de <span t-field="o.ano"/>. El señor/a <b><span t-field="o.nombre"/></b> DNI <span t-field="o.dni"/> quien dice estar Domiciliado actualmente en la calle <span t-field="o.calle"/> N <span t-field="o.numero"/> entre <span t-field="o.entre_calles"/> Partido de <span t-field="o.partido"/> Buenos Aires Argentina. Celebra allí un acuerdo entre partes con fines de compra a 
-TECS (20-33840572-4) y Recibe de Forma inmediata el articulo <span t-field="o.articulo"/> marca <span t-field="o.marca"/> y se compromete a cancelar su totalidad De la siguiente manera:
-Abonar la suma de ($<span t-field="o.suma_inicial"/>) al recibir el articulo y en un plazo no mayor a (<span t-field="o.plazo"/>) Días hábiles a partir del día de la fecha cancelar en forma de cuota: (<span t-field="o.forma_de_cuotas"/>) la cantidad de (<span t-field="o.cantidad_cuotas"/>)cuotas en un valor de ($<span t-field="o.monto_cuotas"/>) pesos ArsC/u<br/><br/>
+TECS (20-33840572-4) y Recibe de Forma inmediata el articulo <span t-field="o.articulo"/> marca <span t-field="o.marca"/> y se compromete a cancelar su totalidad De la siguiente manera:<br/><br/>
+Abonar la suma de ($<span t-field="o.suma_inicial"/>) al recibir el articulo y en un plazo no mayor a (<span t-field="o.plazo"/>) Días hábiles a partir del día de la fecha cancelar en forma de cuota: (<span t-field="o.forma_de_cuotas"/>) la cantidad de (<span t-field="o.cantidad_cuotas"/>)cuotas en un valor de ($<span t-field="o.monto_cuotas"/>) pesos Ars C/u<br/><br/>
 
 Que podrá abonar a través de la empresa PagosPyme en cualquier sucursal de Pago-Fácil<br/><br/>
 
@@ -40,60 +40,39 @@ En caso de no respetar los términos acordados la empresa podrá optar por:<br/>
 
 Se deja copia al cliente de dicho acuerdo y firma conforme a la aceptación del mismo.<br/><br/>
 <br/><br/>
-<table class="table table-condensed" style="width:40%;" align="left">
+<table class="table" style="width:40%;border-bottom:0px;" align="left">
 	<thead>
 		<tr>
-			<th></th>
-			<th style="width:10%;"></th>
-			<th></th>
-			<th style="width:10%;"></th>
-			<th></th>
+			<th>Deudor</th>
+		</tr>
+		<tr>
+			<th>FIRMA</th>
+		</tr>
+		<tr>
+			<th>Aclaracion</th>
 		</tr>
 	</thead>
-	<tbody class="invoice_tbody">
-		<tr align="center">
-			<td>Firma</td>
-			<td></td>
-			<td>Aclaracion</td>
-			<td></td>
-			<td>DNI</td>
-		</tr>
-	</tbody>
 </table>
-<table class="table table-condensed" style="width:40%;" align="right">
+<table class="table" style="width:40%;border-bottom:0px;" align="right">
 	<thead>
 		<tr>
-			<th></th>
-			<th style="width:10%;"></th>
-			<th></th>
-			<th style="width:10%;"></th>
-			<th></th>
+			<th>Acreedor</th>
+		</tr>
+		<tr>
+			<th>T.E.C.S.</th>
+		</tr>
+		<tr>
+			<th>Todo en cuotas semanales</th>
 		</tr>
 	</thead>
-	<tbody class="invoice_tbody">
-		<tr align="center">
-			<td>Firma Co Deudor</td>
-			<td></td>
-			<td>Aclaracion Co Deudor</td>
-			<td></td>
-			<td>DNI Co Deudor</td>
-		</tr>
-	</tbody>
 </table>
-<!-- Deudor<br/><br/>
-Acreedor<br/><br/>
-
-Nombre y apellido:<br/><br/>
-FIRMA:<br/><br/>
-T.E.C.S®
-Todo en cuotas semanales -->
 					</div>
                 </div>
             </t>
         </t>
 	</template>
 	
-	<report 
+	<!-- <report 
 	id="ficha_report"
 	model="convenio.wizard"
 	string="Ficha de Pago"
@@ -101,7 +80,7 @@ Todo en cuotas semanales -->
 	name="tecs_module.ficha_view"
 	attachment_use="True"
 	file="tecs_module.ficha_view"
-/>
+	/>
 
 <template id="ficha_view">
 	<t t-call="report.external_layout">
@@ -208,7 +187,7 @@ Todo en cuotas semanales -->
 			</div>
 		</t>
 	</t>
-</template>
+</template> -->
 
 </data>
 </openerp>
